@@ -13,10 +13,10 @@ topic_name = 'tweets'
 keywords_to_track = ['apple', 'iphone', 'ipad', 'apple music', 'apple pay']
 
 # twitter keys
-CONSUMER_KEY = 'ThuuAkxVQbV4ePWzqf9ZvHlIJ'
-CONSUMER_SECRET = 'jxcuRlU8XRoDjKwGrZryoqTQO72gCtC2LBZz5i7HfZiP0HJ3qu'
-ACCESS_TOKEN = '1379468364725284872-2ywjKYcTUSjTEOiJMPI8eCnjYhRfp5'
-ACCESS_SECRET = 'hYO836ahutGP0c68CZBO1ayVquHb1Bjq2qOxjpXtUPW38'
+CONSUMER_KEY = 
+CONSUMER_SECRET = 
+ACCESS_TOKEN = 
+ACCESS_SECRET = 
 
 # twitter authorization
 auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
