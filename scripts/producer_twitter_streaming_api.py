@@ -1,0 +1,82 @@
+import json
+from json import dumps
+import tweepy
+from tweepy import OAuthHandler
+from tweepy import Stream
+from tweepy.streaming import StreamListener
+from time import sleep
+from kafka import KafkaProducer
+from helper import process_time, convert_dict_to_string
+
+# arguments
+topic_name = 'tweets'
+keywords_to_track = ['apple', 'iphone', 'ipad', 'apple music', 'apple pay']
+
+# twitter keys
+CONSUMER_KEY = 'ThuuAkxVQbV4ePWzqf9ZvHlIJ'
+CONSUMER_SECRET = 'jxcuRlU8XRoDjKwGrZryoqTQO72gCtC2LBZz5i7HfZiP0HJ3qu'
+ACCESS_TOKEN = '1379468364725284872-2ywjKYcTUSjTEOiJMPI8eCnjYhRfp5'
+ACCESS_SECRET = 'hYO836ahutGP0c68CZBO1ayVquHb1Bjq2qOxjpXtUPW38'
+
+# twitter authorization
+auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+
+# init tweepy
+api = tweepy.API(auth)
+
+# init kafka producer
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+                         value_serializer=lambda x: dumps(x).encode('utf-8'),
+                         api_version=(0, 10, 1))
+
+# Step 1: Creating a StreamListener: override tweepy.StreamListener to add logic to on_status
+class MyStreamListener(tweepy.StreamListener):
+    def on_status(self, tweet):
+        length = len(tweet.text.split(' '))
+        if (tweet.lang != 'en') or (length <= 25):
+            pass
+            print("==filtered==")
+            # print("lang: ", tweet.lang)
+            # print("length: ", len(tweet.text.split(' ')))
+
+        else:
+            message = {
+                "text": tweet.text,
+                "created_at": process_time(tweet.created_at),
+                "id": tweet.id_str,
+                # "hashtags":  tweet.entities['hashtags'],
+                # "symbols": tweet.entities['symbols'],
+                "user_id": tweet.user.id_str,
+                "user_location": tweet.user.location,
+                "user_description": tweet.user.description,
+                "user_followers_count": str(tweet.user.followers_count),
+                "user_friends_count": str(tweet.user.friends_count),
+                "user_listed_count": str(tweet.user.listed_count),
+                "user_favourites_count": str(tweet.user.favourites_count),
+                # "geo": tweet.geo,
+                # "coordinates": tweet.coordinates,
+                # "place": tweet.place,
+                "retweet_count": str(tweet.retweet_count),
+                "favorite_count": str(tweet.favorite_count),
+            }
+            
+            #message = convert_dict_to_string(message)
+            print("message:", message)
+
+            # write to kafka topic
+            producer.send(topic_name, value=message)
+
+    def on_error(self, status_code):
+        if status_code == 420:
+            #returning False in on_error disconnects the stream
+            return False
+
+        # returning non-False reconnects the stream, with backoff.
+        
+# Step 2: Creating a Stream
+myStreamListener = MyStreamListener()
+myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+
+# Step 3: Starting a Stream
+myStream.filter(track=keywords_to_track)
