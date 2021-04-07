@@ -10,16 +10,16 @@ from helper import process_time, convert_dict_to_string
 
 # arguments
 topic_name = 'tweets'
-keywords_to_track = ['apple', 'iphone', 'ipad', 'apple music', 'apple pay']
+keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay']
 
 # twitter keys
-CONSUMER_KEY = 'ThuuAkxVQbV4ePWzqf9ZvHlIJ'
-CONSUMER_SECRET = 'jxcuRlU8XRoDjKwGrZryoqTQO72gCtC2LBZz5i7HfZiP0HJ3qu'
-ACCESS_TOKEN = '1379468364725284872-2ywjKYcTUSjTEOiJMPI8eCnjYhRfp5'
-ACCESS_SECRET = 'hYO836ahutGP0c68CZBO1ayVquHb1Bjq2qOxjpXtUPW38'
+API_KEY = 
+API_KEY_SECRET = 
+ACCESS_TOKEN = 
+ACCESS_SECRET = 
 
 # twitter authorization
-auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth = OAuthHandler(API_KEY, API_KEY_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
 # init tweepy
@@ -34,7 +34,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, tweet):
         length = len(tweet.text.split(' '))
-        if (tweet.lang != 'en') or (length <= 25):
+        if (tweet.lang != 'en') or (length <= 20):
             pass
             print("==filtered==")
             # print("lang: ", tweet.lang)
@@ -45,8 +45,8 @@ class MyStreamListener(tweepy.StreamListener):
                 "text": tweet.text,
                 "created_at": process_time(tweet.created_at),
                 "id": tweet.id_str,
-                # "hashtags":  tweet.entities['hashtags'],
-                # "symbols": tweet.entities['symbols'],
+                "hashtags":  tweet.entities['hashtags'],
+                "symbols": tweet.entities['symbols'],
                 "user_id": tweet.user.id_str,
                 "user_location": tweet.user.location,
                 "user_description": tweet.user.description,
@@ -68,6 +68,9 @@ class MyStreamListener(tweepy.StreamListener):
             producer.send(topic_name, value=message)
 
     def on_error(self, status_code):
+        print(status_code)
+
+        # snippet from official documentation
         if status_code == 420:
             #returning False in on_error disconnects the stream
             return False
