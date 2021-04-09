@@ -52,8 +52,9 @@ class SentimentAnalyzer():
         predict_result = np.argmax(saved_model(text_pad_sequence)[0])
         return str(predict_result)
 
-# # init sentiment analyzer
+# # # init sentiment analyzer
 # sa = SentimentAnalyzer()
-# tokenizer = sa.token()
-# text = "i love it so much"
+# # tokenizer = sa.token()
+# text = ""
+# print(sa.preprocess(text))
 # print(sa.predict(text, tokenizer))

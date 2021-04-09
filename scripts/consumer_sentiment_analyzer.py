@@ -29,9 +29,16 @@ for message in consumer:
 
      # overwrite message with its value and preprocess text
      message = message.value.copy()
-     message['text'] = sa.preprocess(message['text'])
-     message['user_description'] = sa.preprocess(message['user_description'])
-     
+     try:
+          message['text'] = sa.preprocess(message['text'])
+     except:
+          message['text'] = ""
+
+     try:
+          message['user_description'] = sa.preprocess(message['user_description'])
+     except:
+          message['user_description'] = ''
+
      # make predictions
      message['sentiment'] = sa.predict(message['text'], tokenizer)
 
