@@ -16,10 +16,13 @@ The goal of this project is to analyze the sentiment towards a number of compani
 
 generate and copy:
 
-CONSUMER_KEY
-CONSUMER_SECRET
-ACCESS_TOKEN
-ACCESS_SECRET
+- CONSUMER_KEY
+
+- CONSUMER_SECRET
+
+- ACCESS_TOKEN
+
+- ACCESS_SECRET
 
 
 1. download JRE to run java programs (zookeeper). JRE developed by Oracle.
