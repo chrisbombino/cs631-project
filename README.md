@@ -11,8 +11,8 @@ The goal of this project is to analyze the sentiment towards a number of compani
 
 0. create account on twitter and apply for developer account. fill in application. approved within seconds. get keys (more on this later)
 
-a. crete app
-b. Go to the app > keys and tokens
+  a. create app in https://developer.twitter.com/en/portal/projects-and-apps
+  b. Go to the app > keys and tokens
 
 generate and copy:
 
