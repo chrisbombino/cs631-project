@@ -23,7 +23,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 
 # init sentiment analyzer
 sa = SentimentAnalyzer()
-
+tokenizer = sa.token()
 # start consuming
 for message in consumer:
 
@@ -33,7 +33,7 @@ for message in consumer:
      message['user_description'] = sa.preprocess(message['user_description'])
      
      # make predictions
-     message['sentiment'] = sa.predict(message['text'])
+     message['sentiment'] = sa.predict(message['text'], tokenizer)
 
      print("==============================================================")
      print(message)

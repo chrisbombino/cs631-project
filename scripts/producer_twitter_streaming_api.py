@@ -10,13 +10,13 @@ from helper import process_time, convert_dict_to_string
 
 # arguments
 topic_name = 'tweets'
-keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay']
+keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay', 'macbook', 'itunes', 'airpod']
 
 # twitter keys
-API_KEY = 
-API_KEY_SECRET = 
-ACCESS_TOKEN = 
-ACCESS_SECRET = 
+API_KEY = '8rthBtNqfK2l1WXDXAHYaZQJH'
+API_KEY_SECRET = 'Xl6qrzyZjQU9feBRYJkk6WD9e6lIWUuKGggWBxEwy8j83Fr7nd'
+ACCESS_TOKEN = '1095921671557414913-ZpYZfegKEpycLhkfmFOlDUa3yN6195'
+ACCESS_SECRET = '3QBsJRISQ2jhEtl05fvDNFckrhWS7xF6TINkrl2JFfEuW'
 
 # twitter authorization
 auth = OAuthHandler(API_KEY, API_KEY_SECRET)
@@ -34,7 +34,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 class MyStreamListener(tweepy.StreamListener):
     def on_status(self, tweet):
         length = len(tweet.text.split(' '))
-        if (tweet.lang != 'en') or (length <= 20):
+        if (tweet.lang != 'en') or (length <= 10):
             pass
             print("==filtered==")
             # print("lang: ", tweet.lang)
