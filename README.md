@@ -11,15 +11,18 @@ The goal of this project is to analyze the sentiment towards a number of compani
 
 0. create account on twitter and apply for developer account. fill in application. approved within seconds. get keys (more on this later)
 
-a. crete app
-b. Go to the app > keys and tokens
+  a. create app in https://developer.twitter.com/en/portal/projects-and-apps
+  b. Go to the app > keys and tokens
 
 generate and copy:
 
-CONSUMER_KEY
-CONSUMER_SECRET
-ACCESS_TOKEN
-ACCESS_SECRET
+- CONSUMER_KEY
+
+- CONSUMER_SECRET
+
+- ACCESS_TOKEN
+
+- ACCESS_SECRET
 
 
 1. download JRE to run java programs (zookeeper). JRE developed by Oracle.
@@ -116,3 +119,7 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 .\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
 
 .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+### Model
+To load the model, remember to have keras and tf in your machine. 
+Simply `pip install keras` and `pip install tensorflow` would be okay. 
