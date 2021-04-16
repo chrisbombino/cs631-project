@@ -13,5 +13,5 @@ def convert_dict_to_string(message):
             msg_str += value + "cs631separator" #cs631separator because , or ; may be in the tweet itself.
         else:
             msg_str += "NAcs631separator"
-    
+
     return msg_str

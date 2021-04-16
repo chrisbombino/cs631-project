@@ -10,7 +10,7 @@ from helper import process_time, convert_dict_to_string
 
 # arguments
 topic_name = 'tweets'
-keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay', 'macbook', 'itunes', 'airpod']
+keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay', 'macbook', 'apple watch', 'airpods', 'apple tv']
 
 # twitter keys
 API_KEY = '8rthBtNqfK2l1WXDXAHYaZQJH'
@@ -61,7 +61,6 @@ class MyStreamListener(tweepy.StreamListener):
                 "favorite_count": str(tweet.favorite_count),
             }
             
-            #message = convert_dict_to_string(message)
             print("message:", message)
 
             # write to kafka topic

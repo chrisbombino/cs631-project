@@ -42,8 +42,8 @@ if not es.indices.exists(INDEX_NAME):
 # start consuming
 for message in consumer:
 
-    # overwrite message with its value and preprocess text
-    message = message.value.copy()
+     # overwrite message with its value and preprocess text
+     message = message.value.copy()
 
     # TODO: Copy code from christopher to save onto elasticsearch
     id = str(uuid4())
