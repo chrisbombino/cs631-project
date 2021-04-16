@@ -106,6 +106,7 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 
 ### Model
+
 == twitter sentiment prediction
 
 == 3 categories: 0 = negative, 1 = neutral, 2 = positive
@@ -134,7 +135,7 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
     - Sentiment 140 http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip
 
 3. training
-4.
+
     We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
 
     The accuracy on test dataset is about 0.71. The model performed well in classifying + and -. Most confusion is between neutruality and other 2 categories.  
