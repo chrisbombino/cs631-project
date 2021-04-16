@@ -1,7 +1,6 @@
 from datetime import datetime
 
 def process_time(time):
-    #time = datetime.strptime(time, '%a %b %d %H:%M:%S +0000 %Y')
     time = time.strftime('%Y-%m-%d %H:%M:%S')
     return time
 

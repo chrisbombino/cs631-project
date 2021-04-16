@@ -21,13 +21,12 @@ es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 # start consuming
 for message in consumer:
 
-    # overwrite message with its value and preprocess text
-    message = message.value.copy()
+     # overwrite message with its value and preprocess text
+     message = message.value.copy()
 
-    # TODO: Copy code from christopher to save onto elasticsearch
+     # index on elasticsearch cluster
+     res = es.index(index="test-index", body=message)
 
-    #res = es.index(index="test-index", id=1, body=message)
-
-    print("===============")
-    print(message)
-    #print(res['result'])
+     print("===============")
+     print(message)
+     #print(res['result'])

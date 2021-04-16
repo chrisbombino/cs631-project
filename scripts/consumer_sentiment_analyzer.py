@@ -24,6 +24,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 # init sentiment analyzer
 sa = SentimentAnalyzer()
 tokenizer = sa.token()
+
 # start consuming
 for message in consumer:
 
