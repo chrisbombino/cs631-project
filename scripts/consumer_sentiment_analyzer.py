@@ -23,17 +23,24 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 
 # init sentiment analyzer
 sa = SentimentAnalyzer()
-
+tokenizer = sa.token()
 # start consuming
 for message in consumer:
 
      # overwrite message with its value and preprocess text
      message = message.value.copy()
-     message['text'] = sa.preprocess(message['text'])
-     message['user_description'] = sa.preprocess(message['user_description'])
-     
+     try:
+          message['text_list'] = sa.preprocess(message['text'])
+     except:
+          message['text_list'] = []
+
+     try:
+          message['user_description_list'] = sa.preprocess(message['user_description'])
+     except:
+          message['user_description_list'] = []
+
      # make predictions
-     message['sentiment'] = sa.predict(message['text'])
+     message['sentiment_name'], message['sentiment'], message['confidence']  = sa.predict(message['text_list'], tokenizer)
 
      print("==============================================================")
      print(message)
