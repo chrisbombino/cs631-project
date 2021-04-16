@@ -31,17 +31,17 @@ for message in consumer:
      # overwrite message with its value and preprocess text
      message = message.value.copy()
      try:
-          message['text'] = sa.preprocess(message['text'])
+          message['text_list'] = sa.preprocess(message['text'])
      except:
-          message['text'] = ""
+          message['text_list'] = []
 
      try:
-          message['user_description'] = sa.preprocess(message['user_description'])
+          message['user_description_list'] = sa.preprocess(message['user_description'])
      except:
-          message['user_description'] = ''
+          message['user_description_list'] = []
 
      # make predictions
-     message['sentiment'] = sa.predict(message['text'], tokenizer)
+     message['sentiment_name'], message['sentiment'], message['confidence']  = sa.predict(message['text_list'], tokenizer)
 
      print("==============================================================")
      print(message)
