@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 from json import loads
+from uuid import uuid4
 
 # arguments
 processed_topic_name = 'processed_tweets'
@@ -24,9 +25,10 @@ for message in consumer:
      # overwrite message with its value and preprocess text
      message = message.value.copy()
 
-     # index on elasticsearch cluster
-     res = es.index(index="test-index", body=message)
+    # TODO: Copy code from christopher to save onto elasticsearch
+    id = str(uuid4())
+    res = es.index(index='processed_tweets', id=id, body=message)
 
-     print("===============")
-     print(message)
-     #print(res['result'])
+    print("===============")
+    print(message)
+    #print(res['result'])
