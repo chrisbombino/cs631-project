@@ -121,5 +121,28 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 
 ### Model
+
+== twitter sentiment prediction 
+
+== 3 categories: 0 = negative, 1 = neutral, 2 = positive
+
+1. packages
 To load the model, remember to have keras and tf in your machine. 
+
 Simply `pip install keras` and `pip install tensorflow` would be okay. 
+
+Mine: Keras 2.2.5, tensorflow2.4.1
+
+Please install nltk in advance. 
+
+2. training
+
+
+It is hard to find a perfect dataset.
+
+Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
+
+The accuracy 
+
+3. pyspark training
+For details, see model/pyspark.ml/pyspark_elephas_deep_learning_Demo.ipynb
