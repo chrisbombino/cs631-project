@@ -127,22 +127,40 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 == 3 categories: 0 = negative, 1 = neutral, 2 = positive
 
 1. packages
-To load the model, remember to have keras and tf in your machine. 
 
-Simply `pip install keras` and `pip install tensorflow` would be okay. 
+    To load the model, remember to have keras and tf in your machine. 
 
-Mine: Keras 2.2.5, tensorflow2.4.1
+    Simply `pip install keras` and `pip install tensorflow` would be okay. 
 
-Please install nltk in advance. 
+    Mine: Keras 2.2.5, tensorflow2.4.1
 
-2. training
+    Please install nltk in advance. 
 
+2. dataset
 
-It is hard to find a perfect dataset.
+    It is hard to find a perfect dataset containing all 3 categories (most datasets only contain 2 categories: positive and negative and not big enough). If we only use one dataset to train, the model will perform badly on other datasets and therefore lack generalization. 
+    
+    So we merge several datasets into one, select the data and keep the count of 3 catogories almost equal, and shuffle the data. Finally a dataset containing about 60,000 tweets are formed. 
+    
+    Dataset we use: 
+    - Twitter US Airline Sentiment [https://www.kaggle.com/crowdflower/twitter-airline-sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment)
+    - Tweet Sentiment Extraction https://www.kaggle.com/c/tweet-sentiment-extraction/data
+    - Preprocessed twitter tweets https://www.kaggle.com/shashank1558/preprocessed-twitter-tweets
+    - Apple Twitter sentiment https://data.world/crowdflower/apple-twitter-sentiment/discuss/apple-twitter-sentiment/miztcmjq#mjczxd3y
+    - Sentiment 140 http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip
+ 
+3. training 
+4. 
+    We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
 
-Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
+    The accuracy on test dataset is about 0.71. The model performed well in classifying + and -. Most confusion is between neutruality and other 2 categories.  
 
-The accuracy 
+4. pyspark training
 
-3. pyspark training
-For details, see model/pyspark.ml/pyspark_elephas_deep_learning_Demo.ipynb
+    Load the data as a rdd and fit the data into a keras model using pyspark and elephas. 
+    
+    The drawback of this pyspark method is that we can only save the fitted pipeline, not the model. It is not convenient for our project. Also the prediction process is slower than general model. So for now we did not use this pyspark method. 
+    
+    In summary, this is an innovative and useful method. It is worthy to explore more in future. 
+
+    For details, see model/pyspark.ml/pyspark_elephas_deep_learning_Demo.ipynb
