@@ -39,7 +39,6 @@ class MyStreamListener(tweepy.StreamListener):
             print("==filtered==")
             # print("lang: ", tweet.lang)
             # print("length: ", len(tweet.text.split(' ')))
-
         else:
             message = {
                 "text": tweet.text,
