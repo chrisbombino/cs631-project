@@ -119,3 +119,7 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 .\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
 
 .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+### Model
+To load the model, remember to have keras and tf in your machine. 
+Simply `pip install keras` and `pip install tensorflow` would be okay. 
