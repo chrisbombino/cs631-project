@@ -21,6 +21,24 @@ consumer = KafkaConsumer(
 es_password = os.getenv('ES_PASS') or ''
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}], http_auth=('elastic', es_password))
 
+INDEX_NAME = 'processed_tweets'
+
+mappings = {
+  "mappings": {
+    "properties": {
+      "created_at": {
+        "type": "date"
+      }
+    }
+  }
+}
+
+# create index
+indices = es.indices
+if not es.indices.exists(INDEX_NAME):
+    indices.create(INDEX_NAME, body=mappings)
+    print('created elasticsearch index {}'.format(INDEX_NAME))
+
 # start consuming
 for message in consumer:
 
@@ -29,7 +47,7 @@ for message in consumer:
 
     # TODO: Copy code from christopher to save onto elasticsearch
     id = str(uuid4())
-    res = es.index(index='processed_tweets', id=id, body=message)
+    res = es.index(index=INDEX_NAME, id=id, body=message)
 
     print("===============")
     print(message)

@@ -2,7 +2,7 @@ from datetime import datetime
 
 def process_time(time):
     #time = datetime.strptime(time, '%a %b %d %H:%M:%S +0000 %Y')
-    time = time.strftime('%Y-%m-%d %H:%M:%S')
+    time = time.strftime('%Y-%m-%dT%H:%M:%S')
     return time
 
 def convert_dict_to_string(message):
