@@ -1,15 +1,16 @@
 from kafka import KafkaConsumer, KafkaProducer
 from json import loads, dumps
 from SentimentAnalyzer import SentimentAnalyzer
+from helper import get_associated_company_and_product
 
 # arguments
-topic_name = 'tweets'
-processed_topic_name = 'processed_tweets'
-consumer_group_id = 'sentiment-analysis-consumers'
+source_topic_name = 'raw_tweets_106'
+sink_topic_name = 'analyzed_tweets_106'
+consumer_group_id = 'sentiment_analysis_consumers'
 
 # init consumer
 consumer = KafkaConsumer(
-     topic_name,
+     source_topic_name,
      bootstrap_servers=['localhost:9092'],
      auto_offset_reset='earliest',
      enable_auto_commit=True,
@@ -24,26 +25,43 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 # init sentiment analyzer
 sa = SentimentAnalyzer()
 tokenizer = sa.token()
+
 # start consuming
 for message in consumer:
 
      # overwrite message with its value and preprocess text
      message = message.value.copy()
-     try:
-          message['text_list'] = sa.preprocess(message['text'])
-     except:
-          message['text_list'] = []
 
+     # extract hashtags
+     hashtags = []
+     if len(message['hashtags'])!=0:
+          for hashtag_data in message['hashtags']:
+               hashtags.append(hashtag_data["text"])
+
+     # overwrite hashtags data structure with plain hashtags text
+     message["hashtags"] = hashtags
+
+     # get product and company info
+     message["company"], message["product"] = get_associated_company_and_product(message['text'])
+
+     # preprocess text data
      try:
-          message['user_description_list'] = sa.preprocess(message['user_description'])
+          tokenized_text = sa.preprocess(message['text'])
      except:
-          message['user_description_list'] = []
+          tokenized_text = []
 
      # make predictions
-     message['sentiment_name'], message['sentiment'], message['confidence']  = sa.predict(message['text_list'], tokenizer)
+     # TODO: Error while running: tensorflow.python.framework.errors_impl.InvalidArgumentError: slice index 0 of dimension 0 out of bounds. [Op:StridedSlice] name: strided_slice/
+     message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
 
-     print("==============================================================")
-     print(message)
+     # for identiable tweets, save analyzed tweets back to kafka in a separate topic
 
-     # save processed tweets with sentiments back to kafka in a separate topic
-     producer.send(processed_topic_name, value=message)
+     if message["company"] != "none":
+          print("==============================================================")
+          print(message)
+
+          producer.send(sink_topic_name, value=message)
+     
+     else:
+          print("==============================================================")
+          print("Product match not found.")       

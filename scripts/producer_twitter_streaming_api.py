@@ -6,11 +6,13 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 from time import sleep
 from kafka import KafkaProducer
-from helper import process_time, convert_dict_to_string
+from helper import process_time, convert_dict_to_string, get_products_to_track
 
 # arguments
-topic_name = 'tweets'
-keywords_to_track = ['iphone', 'ipad', 'apple music', 'apple pay', 'macbook', 'itunes', 'airpod']
+topic_name = 'raw_tweets_106'
+
+# get keywords
+keywords_to_track = get_products_to_track()
 
 # twitter keys
 API_KEY = '8rthBtNqfK2l1WXDXAHYaZQJH'
@@ -37,30 +39,27 @@ class MyStreamListener(tweepy.StreamListener):
         if (tweet.lang != 'en') or (length <= 10):
             pass
             print("==filtered==")
-            # print("lang: ", tweet.lang)
-            # print("length: ", len(tweet.text.split(' ')))
         else:
             message = {
                 "text": tweet.text,
                 "created_at": process_time(tweet.created_at),
                 "id": tweet.id_str,
                 "hashtags":  tweet.entities['hashtags'],
-                "symbols": tweet.entities['symbols'],
+                #"symbols": tweet.entities['symbols'],
                 "user_id": tweet.user.id_str,
                 "user_location": tweet.user.location,
                 "user_description": tweet.user.description,
-                "user_followers_count": str(tweet.user.followers_count),
-                "user_friends_count": str(tweet.user.friends_count),
-                "user_listed_count": str(tweet.user.listed_count),
-                "user_favourites_count": str(tweet.user.favourites_count),
+                "user_followers_count": tweet.user.followers_count,
+                "user_friends_count": tweet.user.friends_count,
+                "user_listed_count": tweet.user.listed_count,
+                "user_favourites_count": tweet.user.favourites_count,
                 # "geo": tweet.geo,
                 # "coordinates": tweet.coordinates,
                 # "place": tweet.place,
-                "retweet_count": str(tweet.retweet_count),
-                "favorite_count": str(tweet.favorite_count),
+                "retweet_count": tweet.retweet_count,
+                "favorite_count": tweet.favorite_count,
             }
             
-            #message = convert_dict_to_string(message)
             print("message:", message)
 
             # write to kafka topic
@@ -71,8 +70,9 @@ class MyStreamListener(tweepy.StreamListener):
 
         # snippet from official documentation
         if status_code == 420:
+            print("Error 420. Trying to reconnect.")
             #returning False in on_error disconnects the stream
-            return False
+            return True
 
         # returning non-False reconnects the stream, with backoff.
         

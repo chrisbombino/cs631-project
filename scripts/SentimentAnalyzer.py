@@ -17,8 +17,7 @@ class SentimentAnalyzer():
     def __init__(self):
         pass
     
-    def loadmodel(self):
-        # TODO: Load saved model from models folder
+    def load_model(self):
         saved_model = load_model('../model/best_model_bilstm.h5')
         return saved_model
     
@@ -45,20 +44,18 @@ class SentimentAnalyzer():
         tokenizer.fit_on_texts(data['text_cleaned_string'].values)
         return tokenizer
 
-
-
     def predict(self, text_list, tokenizer):
         # call preprocess
         # Make prediction over preprocessed text using loaded model
 
-        saved_model = self.loadmodel()
+        saved_model = self.load_model()
         text_pad_sequence = pad_sequences(tokenizer.texts_to_sequences(text_list), maxlen=32)
         prediction = saved_model(text_pad_sequence)[0]
         confidence = np.max(prediction)
         predict_result = np.argmax(prediction)
-        sentiment_list = ['negative','neutral','positive']
+        sentiment_list = ['Negative','Neutral','Positive']
         sentiment_name = sentiment_list[predict_result]
-        return str(sentiment_name), str(predict_result), float(confidence)
+        return sentiment_name, float(confidence)
 
 # # # # init sentiment analyzer
 # sa = SentimentAnalyzer()
