@@ -26,43 +26,56 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 sa = SentimentAnalyzer()
 tokenizer = sa.token()
 
+# Temporary fix for duplicate records.
+# This can remove duplicates that appear in a sequence, in a single run of this script.
+previous_tweet_id = ""
+
 # start consuming
 for message in consumer:
 
      # overwrite message with its value and preprocess text
      message = message.value.copy()
 
-     # extract hashtags
-     hashtags = []
-     if len(message['hashtags'])!=0:
-          for hashtag_data in message['hashtags']:
-               hashtags.append(hashtag_data["text"])
+     if message["id"] != previous_tweet_id:
+          
+          # update previous_tweet_id
+          previous_tweet_id = message["id"]
 
-     # overwrite hashtags data structure with plain hashtags text
-     message["hashtags"] = hashtags
+          # extract hashtags
+          hashtags = []
+          if len(message['hashtags'])!=0:
+               for hashtag_data in message['hashtags']:
+                    hashtags.append(hashtag_data["text"])
 
-     # get product and company info
-     message["company"], message["product"] = get_associated_company_and_product(message['text'])
+          # overwrite hashtags data structure with plain hashtags text
+          message["hashtags"] = hashtags
 
-     # preprocess text data
-     try:
-          tokenized_text = sa.preprocess(message['text'])
-     except:
-          tokenized_text = []
+          # get product and company info
+          message["company"], message["product"] = get_associated_company_and_product(message['text'])
 
-     # make predictions
+          # preprocess text data
+          try:
+               tokenized_text = sa.preprocess(message['text'])
+          except:
+               tokenized_text = []
 
-     try:
-          message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
-     except: # to prevent there may be other bugs we did not imagine
-          message['sentiment'], message['confidence'] = ('Neutral', 0.5)
-     
-     # for identiable tweets, save analyzed tweets back to kafka in a separate topic
-     if message["company"] != "none" and message["company"] != "mix":
-          print("==============================================================")
-          print(message)
-          producer.send(sink_topic_name, value=message)
-     
+          # make predictions
+
+          try:
+               message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
+          except: # to prevent there may be other bugs we did not imagine
+               message['sentiment'], message['confidence'] = ('Neutral', 0.5)
+          
+          # for identiable tweets, save analyzed tweets back to kafka in a separate topic
+          if message["company"] != "none" and message["company"] != "mix":
+               print("==============================================================")
+               print(message)
+               producer.send(sink_topic_name, value=message)
+          
+          else:
+               print("==============================================================")
+               print("Product match not found.")       
+
      else:
           print("==============================================================")
-          print("Product match not found.")       
+          print("Skipping writing duplicate tweet.")
