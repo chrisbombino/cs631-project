@@ -2,7 +2,6 @@ from datetime import datetime
 from json import loads
 
 def process_time(time):
-    #time = datetime.strptime(time, '%a %b %d %H:%M:%S +0000 %Y')
     time = time.strftime('%Y-%m-%dT%H:%M:%S')
     return time
 
@@ -14,11 +13,7 @@ def convert_dict_to_string(message):
             msg_str += value + "cs631separator" #cs631separator because , or ; may be in the tweet itself.
         else:
             msg_str += "NAcs631separator"
-<<<<<<< HEAD
 
-    return msg_str
-=======
-    
     return msg_str
 
 
@@ -32,7 +27,7 @@ def get_products_to_track(return_dict = 0):
     products_to_track = []
     for company in data:
         products_to_track += data[company]
-    
+
     if return_dict == 1:
         return products_to_track, data
 
@@ -57,7 +52,7 @@ def get_associated_company_and_product(tweet):
                     associated_company = company
                     associated_product = product
                     company_found += 1
-    
+
         # keeping it simple for now. also since search products are more explicit now,
         # the exact substring match may suffice.
 
@@ -90,4 +85,3 @@ def get_associated_company_and_product(tweet):
         return associated_company, associated_product
 
 #print(get_associated_company_and_product("Samsung Galaxy Buds Pro see 1-day discount down to $165 (Sav"))
->>>>>>> ada3445... Multiple changes for es and kafka

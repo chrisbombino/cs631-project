@@ -3,11 +3,12 @@ from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 from json import loads
 from uuid import uuid4
+from helper import process_time
 
 # arguments
-source_topic_name = 'analyzed_tweets_106'
+source_topic_name = 'analyzed_tweets_112'
 consumer_group_id = 'elasticsearch_consumers'
-index_name = 'tweets_106'
+index_name = 'sentiment_analysis_112'
 
 # init consumer
 consumer = KafkaConsumer(
@@ -40,6 +41,25 @@ if not es.indices.exists(INDEX_NAME):
     indices.create(INDEX_NAME, body=mappings)
     print('created elasticsearch index {}'.format(INDEX_NAME))
 
+# specify mappings
+
+mappings = {
+  "mappings": {
+    "properties": {
+      "created_at": {
+        "type": "date"
+      }
+    }
+  }
+}
+
+# create index
+indices = es.indices
+if not es.indices.exists(index_name):
+    a = indices.create(index_name, body=mappings)
+    print('created index {}'.format(index_name))
+    print(a)
+
 # start consuming
 for message in consumer:
 
@@ -48,12 +68,6 @@ for message in consumer:
 
      print("===============")
      print(message)
-
-     # for elasticsearch to pick-up timestamps, have to specify a _timestamp field
-     # not sure if it looks for _ prefix for metadata of the document or
-     # the field name has to contain a "timestamp" substring.
-     #message["date"] = message["created_at"]
-     message["_timestamp"] = message["created_at"]
 
      # write onto elasticsearch index
      id = str(uuid4())
