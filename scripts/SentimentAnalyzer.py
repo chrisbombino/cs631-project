@@ -10,7 +10,6 @@ import warnings
 from nltk.corpus import stopwords
 import nltk
 nltk.download('stopwords')
-
 warnings.filterwarnings("ignore")
 
 class SentimentAnalyzer():
@@ -47,19 +46,23 @@ class SentimentAnalyzer():
     def predict(self, text_list, tokenizer):
         # call preprocess
         # Make prediction over preprocessed text using loaded model
-
         saved_model = self.load_model()
-        text_pad_sequence = pad_sequences(tokenizer.texts_to_sequences(text_list), maxlen=32)
+
+        token_list = tokenizer.texts_to_sequences([" ".join(text_list)])
+        # made a mistake here before, the input should be text, not list
+
+        text_pad_sequence = pad_sequences(token_list, maxlen=32, )
         prediction = saved_model(text_pad_sequence)[0]
         confidence = np.max(prediction)
-        predict_result = np.argmax(prediction)
+        predict_result = int(np.argmax(prediction))
         sentiment_list = ['Negative','Neutral','Positive']
         sentiment_name = sentiment_list[predict_result]
         return sentiment_name, float(confidence)
 
-# # # # init sentiment analyzer
+# # # # # init sentiment analyzer
 # sa = SentimentAnalyzer()
 # tokenizer = sa.token()
-# text = "http:// I love this game!"
+# text = "@iiii @jjjj"
 # text_list = sa.preprocess(text)
+# print(text_list)
 # print(sa.predict(text_list, tokenizer))

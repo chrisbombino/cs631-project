@@ -51,15 +51,16 @@ for message in consumer:
           tokenized_text = []
 
      # make predictions
-     # TODO: Error while running: tensorflow.python.framework.errors_impl.InvalidArgumentError: slice index 0 of dimension 0 out of bounds. [Op:StridedSlice] name: strided_slice/
-     message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
 
-     # for identiable tweets, save analyzed tweets back to kafka in a separate topic
+     try:
+          message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
+     except: # to prevent there may be other bugs we did not imagine
+          message['sentiment'], message['confidence'] = ('Neutral', 0.5)
+          # for identiable tweets, save analyzed tweets back to kafka in a separate topic
 
      if message["company"] != "none":
           print("==============================================================")
           print(message)
-
           producer.send(sink_topic_name, value=message)
      
      else:
