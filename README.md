@@ -7,6 +7,7 @@ The goal of this project is to analyze the sentiment towards a number of compani
 
 #### Learning Outomces
 - General Kafka acrchitecture - topics, producers, consumers
+- Apply nature language processing and deep learning to perform sentiment analysis of text data
 - Indexing and retrieving data in Elasticsearch
 - Developing dashboards with Kibana
 - Running everything on AWS EC2
