@@ -36,6 +36,8 @@ date_since = '2021-04-16'
 
 tweets = tweepy.Cursor(api.search, q=search_words, since=date_since).items()
 
+print('========= BEGINNING BULK PROCESSING OF OLD TWEETS =========')
+
 for tweet in tweets:
     length = len(tweet.text.split(' '))
     if (tweet.lang != 'en') or (length <= 10):
@@ -62,3 +64,5 @@ for tweet in tweets:
 
         # write to kafka topic
         producer.send(topic_name, value=message)
+
+print('========= BULK PROCESSING OF OLD TWEETS COMPLETE =========')
