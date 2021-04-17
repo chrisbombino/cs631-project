@@ -4,8 +4,8 @@ from SentimentAnalyzer import SentimentAnalyzer
 from helper import get_associated_company_and_product
 
 # arguments
-source_topic_name = 'raw_tweets_106'
-sink_topic_name = 'analyzed_tweets_106'
+source_topic_name = 'raw_tweets_112'
+sink_topic_name = 'analyzed_tweets_112'
 consumer_group_id = 'sentiment_analysis_consumers'
 
 # init consumer
@@ -56,8 +56,8 @@ for message in consumer:
           message['sentiment'], message['confidence'] = sa.predict(tokenized_text, tokenizer)
      except: # to prevent there may be other bugs we did not imagine
           message['sentiment'], message['confidence'] = ('Neutral', 0.5)
-          # for identiable tweets, save analyzed tweets back to kafka in a separate topic
-
+     
+     # for identiable tweets, save analyzed tweets back to kafka in a separate topic
      if message["company"] != "none":
           print("==============================================================")
           print(message)
