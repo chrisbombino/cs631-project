@@ -5,3 +5,4 @@ pandas==1.2.4
 tensorflow==2.4.1
 tweepy==3.10.0
 uuid==1.30
+nltk==3.6.1

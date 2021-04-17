@@ -20,7 +20,7 @@ def convert_dict_to_string(message):
 def get_products_to_track(return_dict = 0):
 
     # load and read json file
-    with open(".\products_to_track.json") as f:
+    with open("products_to_track.json") as f:
         data = loads(f.read())
 
     # get products list
