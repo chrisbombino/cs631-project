@@ -31,50 +31,34 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
                          value_serializer=lambda x: dumps(x).encode('utf-8'),
                          api_version=(0, 10, 1))
 
-api.search_full_archive()
+search_words = '**iphone**'
+date_since = '2021-04-16'
 
-# Step 1: Creating a StreamListener: override tweepy.StreamListener to add logic to on_status
-class MyStreamListener(tweepy.StreamListener):
-    def on_status(self, tweet):
-        length = len(tweet.text.split(' '))
-        if (tweet.lang != 'en') or (length <= 10):
-            pass
-            print("==filtered==")
-            # print("lang: ", tweet.lang)
-            # print("length: ", len(tweet.text.split(' ')))
+tweets = tweepy.Cursor(api.search, q=search_words, since=date_since).items()
 
-        else:
-            message = {
-                "text": tweet.text,
-                "created_at": process_time(tweet.created_at),
-                "id": tweet.id_str,
-                "hashtags":  tweet.entities['hashtags'],
-                "symbols": tweet.entities['symbols'],
-                "user_id": tweet.user.id_str,
-                "user_location": tweet.user.location,
-                "user_description": tweet.user.description,
-                "user_followers_count": str(tweet.user.followers_count),
-                "user_friends_count": str(tweet.user.friends_count),
-                "user_listed_count": str(tweet.user.listed_count),
-                "user_favourites_count": str(tweet.user.favourites_count),
-                # "geo": tweet.geo,
-                # "coordinates": tweet.coordinates,
-                # "place": tweet.place,
-                "retweet_count": str(tweet.retweet_count),
-                "favorite_count": str(tweet.favorite_count),
-            }
+for tweet in tweets:
+    length = len(tweet.text.split(' '))
+    if (tweet.lang != 'en') or (length <= 10):
+        print("==filtered==")
+    else:
+        message = {
+            "text": tweet.text,
+            "created_at": process_time(tweet.created_at),
+            "id": tweet.id_str,
+            "hashtags":  tweet.entities['hashtags'],
+            "symbols": tweet.entities['symbols'],
+            "user_id": tweet.user.id_str,
+            "user_location": tweet.user.location,
+            "user_description": tweet.user.description,
+            "user_followers_count": tweet.user.followers_count,
+            "user_friends_count": tweet.user.friends_count,
+            "user_listed_count": tweet.user.listed_count,
+            "user_favourites_count": tweet.user.favourites_count,
+            "retweet_count": tweet.retweet_count,
+            "favorite_count": tweet.favorite_count,
+        }
 
-            print("message:", message)
+        print("message:", message)
 
-            # write to kafka topic
-            producer.send(topic_name, value=message)
-
-    def on_error(self, status_code):
-        print(status_code)
-
-        # snippet from official documentation
-        if status_code == 420:
-            #returning False in on_error disconnects the stream
-            return False
-
-        # returning non-False reconnects the stream, with backoff.
+        # write to kafka topic
+        producer.send(topic_name, value=message)
