@@ -12,3 +12,7 @@ The goal of this project is to analyze the sentiment towards a number of compani
 - Developing dashboards with Kibana
 - Running everything on AWS EC2
 - Automating the process with Terraform
+
+#### Kibana Dashboard Output
+
+![image](https://user-images.githubusercontent.com/44922205/115126712-40295880-9f9f-11eb-8260-2c518fc9f338.png)
