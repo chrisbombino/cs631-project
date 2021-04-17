@@ -3,7 +3,7 @@
 
 #### Overview
 
-The goal of this project is to analyze the sentiment towards a number of companies using both historical and real time tweets. The data will be processed using Kafka, stored in Elasticsearch, and analyzed in a Kibana dashboard.
+The goal of this project is to analyze the sentiment towards a number of companies using both historical and real time tweets. The data will be streamed using Kafka, analyzed using NLP/Deep Learning methods, stored in Elasticsearch, and then analyzed in a Kibana dashboard.
 
 #### Learning Outomces
 - General Kafka acrchitecture - topics, producers, consumers
