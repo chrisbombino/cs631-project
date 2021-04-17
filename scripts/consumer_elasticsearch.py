@@ -5,9 +5,9 @@ from uuid import uuid4
 from helper import process_time
 
 # arguments
-source_topic_name = 'analyzed_tweets_112'
+source_topic_name = 'analyzed_tweets_113'
 consumer_group_id = 'elasticsearch_consumers'
-index_name = 'sentiment_analysis_112'
+index_name = 'sentiment_analysis_113'
 
 # init consumer
 consumer = KafkaConsumer(

@@ -9,7 +9,7 @@ from kafka import KafkaProducer
 from helper import process_time, convert_dict_to_string, get_products_to_track
 
 # arguments
-topic_name = 'raw_tweets_112'
+topic_name = 'raw_tweets_113'
 
 # get keywords
 keywords_to_track = get_products_to_track()
