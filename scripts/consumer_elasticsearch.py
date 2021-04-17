@@ -3,14 +3,16 @@ from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 from json import loads
 from uuid import uuid4
+from helper import process_time
 
 # arguments
-processed_topic_name = 'processed_tweets'
-consumer_group_id = 'elasticsearch-consumers'
+source_topic_name = 'analyzed_tweets_113'
+consumer_group_id = 'elasticsearch_consumers'
+index_name = 'sentiment_analysis_113'
 
 # init consumer
 consumer = KafkaConsumer(
-     processed_topic_name,
+     source_topic_name,
      bootstrap_servers=['localhost:9092'],
      auto_offset_reset='earliest',
      enable_auto_commit=True,
@@ -21,7 +23,7 @@ consumer = KafkaConsumer(
 es_password = os.getenv('ES_PASS') or ''
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}], http_auth=('elastic', es_password))
 
-INDEX_NAME = 'processed_tweets'
+# specify mappings
 
 mappings = {
   "mappings": {
@@ -35,20 +37,19 @@ mappings = {
 
 # create index
 indices = es.indices
-if not es.indices.exists(INDEX_NAME):
-    indices.create(INDEX_NAME, body=mappings)
-    print('created elasticsearch index {}'.format(INDEX_NAME))
+if not es.indices.exists(index_name):
+    indices.create(index_name, body=mappings)
+    print('created elasticsearch index {}'.format(index_name))
 
 # start consuming
 for message in consumer:
 
-    # overwrite message with its value and preprocess text
-    message = message.value.copy()
+     # overwrite message with its value and preprocess text
+     message = message.value.copy()
 
-    # TODO: Copy code from christopher to save onto elasticsearch
-    id = str(uuid4())
-    res = es.index(index=INDEX_NAME, id=id, body=message)
+     print("===============")
+     print(message)
 
-    print("===============")
-    print(message)
-    #print(res['result'])
+     # write onto elasticsearch index
+     id = str(uuid4())
+     res = es.index(index=index_name, id=id, body=message)
