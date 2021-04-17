@@ -13,6 +13,10 @@ The goal of this project is to analyze the sentiment towards a number of compani
 - Running everything on AWS EC2
 - Automating the process with Terraform
 
+#### System Architecture
+
+![image](https://user-images.githubusercontent.com/44922205/115128792-4e32a580-9fae-11eb-8512-2b61d03671ea.png)
+
 #### Kibana Dashboard Output
 
 ![image](https://user-images.githubusercontent.com/44922205/115126712-40295880-9f9f-11eb-8260-2c518fc9f338.png)
