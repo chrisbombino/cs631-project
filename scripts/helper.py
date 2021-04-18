@@ -2,7 +2,11 @@ from datetime import datetime
 from json import loads
 
 def process_time(time):
+<<<<<<< HEAD
     time = time.strftime('%Y-%m-%d %H:%M:%S')
+=======
+    time = time.strftime('%Y-%m-%dT%H:%M:%S')
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
     return time
 
 def convert_dict_to_string(message):
@@ -13,21 +17,33 @@ def convert_dict_to_string(message):
             msg_str += value + "cs631separator" #cs631separator because , or ; may be in the tweet itself.
         else:
             msg_str += "NAcs631separator"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
     return msg_str
 
 
 def get_products_to_track(return_dict = 0):
 
     # load and read json file
+<<<<<<< HEAD
     with open(".\products_to_track.json") as f:
+=======
+    with open("products_to_track.json") as f:
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
         data = loads(f.read())
 
     # get products list
     products_to_track = []
     for company in data:
         products_to_track += data[company]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
     if return_dict == 1:
         return products_to_track, data
 
@@ -52,7 +68,11 @@ def get_associated_company_and_product(tweet):
                     associated_company = company
                     associated_product = product
                     company_found += 1
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
         # keeping it simple for now. also since search products are more explicit now,
         # the exact substring match may suffice.
 
@@ -84,4 +104,8 @@ def get_associated_company_and_product(tweet):
     elif company_found == 1:
         return associated_company, associated_product
 
+<<<<<<< HEAD
 #print(get_associated_company_and_product("Samsung Galaxy Buds Pro see 1-day discount down to $165 (Sav"))
+=======
+#print(get_associated_company_and_product("Samsung Galaxy Buds Pro see 1-day discount down to $165 (Sav"))
+>>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
