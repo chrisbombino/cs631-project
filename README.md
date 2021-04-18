@@ -160,7 +160,7 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 
 3. training 
 
-    We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
+    We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/sentiment_model_training.ipynb
 
     The accuracy on test dataset is about 0.71. The model performed well in classifying + and -. Most confusion is between neutrality and other 2 categories.  
 
