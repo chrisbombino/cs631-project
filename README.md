@@ -5,8 +5,8 @@
 
 The goal of this project is to analyze the sentiment towards a number of companies using both historical and real time tweets. The data will be streamed using Kafka, analyzed using NLP/Deep Learning methods, stored in Elasticsearch, and then analyzed in a Kibana dashboard.
 
-#### Learning Outomces
-- General Kafka acrchitecture - topics, producers, consumers
+#### Learning Outcomes
+- General Kafka architecture - topics, producers, consumers
 - Applying nature language processing and deep learning to perform sentiment analysis of text data
 - Indexing and retrieving data in Elasticsearch
 - Developing dashboards with Kibana
@@ -157,22 +157,26 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
     - Preprocessed twitter tweets https://www.kaggle.com/shashank1558/preprocessed-twitter-tweets
     - Apple Twitter sentiment https://data.world/crowdflower/apple-twitter-sentiment/discuss/apple-twitter-sentiment/miztcmjq#mjczxd3y
     - Sentiment 140 http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip
- 
+
 3. training 
 
     We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
 
-    The accuracy on test dataset is about 0.71. The model performed well in classifying + and -. Most confusion is between neutruality and other 2 categories.  
+    The accuracy on test dataset is about 0.71. The model performed well in classifying + and -. Most confusion is between neutrality and other 2 categories.  
 
 4. pyspark training
 
     Load the data as a rdd and fit the data into a keras model using pyspark and elephas. 
-    
+
     The drawback of this pyspark method is that we can only save the fitted pipeline, not the model. It is not convenient for our project. Also the prediction process is slower than general model. So for now we did not use this pyspark method. 
-    
+
     In summary, this is an innovative and useful method. It is worthy to explore more in future. 
 
     For details, see model/pyspark.ml/pyspark_elephas_deep_learning_Demo.ipynb
-=======
-![image](https://user-images.githubusercontent.com/44922205/115126712-40295880-9f9f-11eb-8260-2c518fc9f338.png)
+
+    
+
+    
+
+    ![image](https://user-images.githubusercontent.com/44922205/115126712-40295880-9f9f-11eb-8260-2c518fc9f338.png)
 >>>>>>> 40cf69c1a9bab997f68befb8633389a4ceef72b3
