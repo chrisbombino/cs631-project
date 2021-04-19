@@ -1,3 +1,4 @@
+import os
 from kafka import KafkaConsumer
 from elasticsearch import Elasticsearch
 from json import loads
@@ -19,7 +20,26 @@ consumer = KafkaConsumer(
      value_deserializer=lambda x: loads(x.decode('utf-8')))
 
 # init elasticsearch
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+es_password = os.getenv('ES_PASS') or ''
+es = Elasticsearch([{'host': 'localhost', 'port': 9200}], http_auth=('elastic', es_password))
+
+# specify mappings
+
+mappings = {
+  "mappings": {
+    "properties": {
+      "created_at": {
+        "type": "date"
+      }
+    }
+  }
+}
+
+# create index
+indices = es.indices
+if not es.indices.exists(index_name):
+    indices.create(index_name, body=mappings)
+    print('created elasticsearch index {}'.format(index_name))
 
 # specify mappings
 
@@ -45,6 +65,7 @@ for message in consumer:
 
      # overwrite message with its value and preprocess text
      message = message.value.copy()
+<<<<<<< HEAD
 
      print("===============")
      print(message)
@@ -54,3 +75,12 @@ for message in consumer:
      res = es.index(index=index_name, id=id, body=message)
 
 
+=======
+
+     print("===============")
+     print(message)
+
+     # write onto elasticsearch index
+     id = str(uuid4())
+     res = es.index(index=index_name, id=id, body=message)
+>>>>>>> a841b0b7b72e3b0f6413e47e63f14a2db38dc6d7

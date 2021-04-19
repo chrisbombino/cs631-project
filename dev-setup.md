@@ -1,21 +1,12 @@
-# CS 631 Course Project
-### University of Waterloo W2021
+## Steps to Setup Development Environment
 
-#### Overview
+#### Twitter
 
-<<<<<<< HEAD
-The goal of this project is to analyze the sentiment towards a number of companies using both historical and real time tweets. The data will be analyzed in a Kibana dashboard.
+1. Create account on Twitter and apply for developer account. fill in application. approved within seconds. get keys (more on this later)
+2. Under Projects & Apps, create an app and copy the API keys that are generated
+3. In the app, go to Keys and tokens and generate new Access Token and Secret
 
-
-## Temp Notes
-
-
-0. create account on twitter and apply for developer account. fill in application. approved within seconds. get keys (more on this later)
-
-  a. create app in https://developer.twitter.com/en/portal/projects-and-apps
-  b. Go to the app > keys and tokens
-
-generate and copy:
+ENSURE YOU HAVE COPIED THE FOLLOWING:
 
 - CONSUMER_KEY
 
@@ -26,19 +17,12 @@ generate and copy:
 - ACCESS_SECRET
 
 
-1. download JRE to run java programs (zookeeper). JRE developed by Oracle.
+#### Kafka
 
-https://www.oracle.com/ca-en/java/technologies/javase-jre8-downloads.html
+1. Download JRE to run java programs (zookeeper). JRE developed by Oracle: https://www.oracle.com/ca-en/java/technologies/javase-jre8-downloads.html
 
 
-jre-8u281-windows-x64.exe
-
-installation path:
-C:\Program Files\Java\jre1.8.0_281
-
-2. download zookeeper
-
-https://zookeeper.apache.org/releases.html#download
+2. Download zookeeper: https://zookeeper.apache.org/releases.html#download
 
 
 Apache ZooKeeper 3.7.0
@@ -123,34 +107,34 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 
 ### Model
 
-== twitter sentiment prediction 
+== twitter sentiment prediction
 
 == 3 categories: 0 = negative, 1 = neutral, 2 = positive
 
 1. packages
 
-    To load the model, remember to have keras and tf in your machine. 
+    To load the model, remember to have keras and tf in your machine.
 
-    Simply `pip install keras` and `pip install tensorflow` would be okay. 
+    Simply `pip install keras` and `pip install tensorflow` would be okay.
 
     Mine: Keras 2.2.5, tensorflow2.4.1
 
-    Please install nltk in advance. 
+    Please install nltk in advance.
 
 2. dataset
 
-    It is hard to find a perfect dataset containing all 3 categories (most datasets only contain 2 categories: positive and negative and not big enough). If we only use one dataset to train, the model will perform badly on other datasets and therefore lack generalization. 
-    
-    So we merge several datasets into one, select the data and keep the count of 3 catogories almost equal, and shuffle the data. Finally a dataset containing about 60,000 tweets are formed. 
-    
-    Dataset we use: 
+    It is hard to find a perfect dataset containing all 3 categories (most datasets only contain 2 categories: positive and negative and not big enough). If we only use one dataset to train, the model will perform badly on other datasets and therefore lack generalization.
+
+    So we merge several datasets into one, select the data and keep the count of 3 catogories almost equal, and shuffle the data. Finally a dataset containing about 60,000 tweets are formed.
+
+    Dataset we use:
     - Twitter US Airline Sentiment [https://www.kaggle.com/crowdflower/twitter-airline-sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment)
     - Tweet Sentiment Extraction https://www.kaggle.com/c/tweet-sentiment-extraction/data
     - Preprocessed twitter tweets https://www.kaggle.com/shashank1558/preprocessed-twitter-tweets
     - Apple Twitter sentiment https://data.world/crowdflower/apple-twitter-sentiment/discuss/apple-twitter-sentiment/miztcmjq#mjczxd3y
     - Sentiment 140 http://cs.stanford.edu/people/alecmgo/trainingandtestdata.zip
- 
-3. training 
+
+3. training
 
     We have tried CNN, LSTM and Bi-LSTM to train the sentiment analysis model. Among them, Bi-LSTM is the best method we have tried. For details, see model/twitter_sentiment_training_bilstm.ipynb
 
@@ -158,20 +142,10 @@ then I pressed enter in the console running kafka cluster. not sure why I had to
 
 4. pyspark training
 
-    Load the data as a rdd and fit the data into a keras model using pyspark and elephas. 
-    
-    The drawback of this pyspark method is that we can only save the fitted pipeline, not the model. It is not convenient for our project. Also the prediction process is slower than general model. So for now we did not use this pyspark method. 
-    
-    In summary, this is an innovative and useful method. It is worthy to explore more in future. 
+    Load the data as a rdd and fit the data into a keras model using pyspark and elephas.
+
+    The drawback of this pyspark method is that we can only save the fitted pipeline, not the model. It is not convenient for our project. Also the prediction process is slower than general model. So for now we did not use this pyspark method.
+
+    In summary, this is an innovative and useful method. It is worthy to explore more in future.
 
     For details, see model/pyspark.ml/pyspark_elephas_deep_learning_Demo.ipynb
-=======
-The goal of this project is to analyze the sentiment towards a number of companies using both historical and real time tweets. The data will be processed using Kafka, stored in Elasticsearch, and analyzed in a Kibana dashboard.
-
-#### Learning Outomces
-- General Kafka acrchitecture - topics, producers, consumers
-- Indexing and retrieving data in Elasticsearch
-- Developing dashboards with Kibana
-- Running everything on AWS EC2
-- Automating the process with Terraform
->>>>>>> a841b0b7b72e3b0f6413e47e63f14a2db38dc6d7
